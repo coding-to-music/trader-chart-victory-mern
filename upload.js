@@ -88,46 +88,89 @@ const upload = async (start, finish, max, asset, category, symbol) => {
   }
 };
 
-const db = mongoose
-  .connect(DB, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
-  .then(() => {
-    console.log('DB connection successful!');
-    console.log(
-      `Connected to MongoDB ${db.name} . ${db.collection} at ${db.host}:${db.port}`
-    );
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
-    const assetType = prompt('Asset Type (Crypto | Forex | Metals):  ');
-    const asset = prompt('Asset (ETHBTC | EURUSD | XAGUSD):  ');
+const db = mongoose.connection;
 
-    console.log(assetType);
+db.once('connected', () => {
+  console.log(`Connected to MongoDB ${db.name} at ${db.host}:${db.port}`);
 
-    console.log(asset);
+  const assetType = prompt('Asset Type (Crypto | Forex | Metals):  ');
+  const asset = prompt('Asset (ETHBTC | EURUSD | XAGUSD):  ');
 
-    const file = path.join(
-      __dirname,
-      '/sampleData/',
+  console.log(assetType);
+
+  console.log(asset);
+
+  const file = path.join(
+    __dirname,
+    '/sampleData/',
+    assetType.toLowerCase(),
+    '/',
+    asset.toUpperCase() + '.json'
+  );
+
+  try {
+    const data = fs.readFileSync(file, 'utf8');
+
+    const length = data.length;
+
+    upload(
+      0,
+      inc,
+      length,
+      JSON.parse(data),
       assetType.toLowerCase(),
-      '/',
-      asset.toUpperCase() + '.json'
+      asset.toUpperCase()
     );
+  } catch (err) {
+    console.error(err);
+  }
+});
 
-    try {
-      const data = fs.readFileSync(file, 'utf8');
+// const db = mongoose
+//   .connect(DB, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true
+//   })
+//   .then(() => {
+//     console.log('DB connection successful!');
+//     console.log(
+//       `Connected to MongoDB ${db.name} . ${db.collection} at ${db.host}:${db.port}`
+//     );
 
-      const length = data.length;
+//     const assetType = prompt('Asset Type (Crypto | Forex | Metals):  ');
+//     const asset = prompt('Asset (ETHBTC | EURUSD | XAGUSD):  ');
 
-      upload(
-        0,
-        inc,
-        length,
-        JSON.parse(data),
-        assetType.toLowerCase(),
-        asset.toUpperCase()
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  });
+//     console.log(assetType);
+
+//     console.log(asset);
+
+//     const file = path.join(
+//       __dirname,
+//       '/sampleData/',
+//       assetType.toLowerCase(),
+//       '/',
+//       asset.toUpperCase() + '.json'
+//     );
+
+//     try {
+//       const data = fs.readFileSync(file, 'utf8');
+
+//       const length = data.length;
+
+//       upload(
+//         0,
+//         inc,
+//         length,
+//         JSON.parse(data),
+//         assetType.toLowerCase(),
+//         asset.toUpperCase()
+//       );
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   });
