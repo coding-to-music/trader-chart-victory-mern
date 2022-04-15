@@ -11,7 +11,7 @@ process.on('uncaughtException', err => {
 
 const app = require('./app');
 
-const DB = process.env.MONGODB_URI;
+// const DB = process.env.MONGODB_URI;
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
@@ -33,11 +33,29 @@ process.on('SIGTERM', () => {
   });
 });
 
-mongoose
-  .connect(DB, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
-  .then(() => {
-    console.log('DB connection successful!');
-  });
+// const mongoose = require("mongoose");
+
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false
+});
+
+const db = mongoose.connection;
+
+db.once('connected', () => {
+  console.log(`Connected to MongoDB ${db.name} at ${db.host}:${db.port}`);
+});
+
+// mongoose
+//   .connect(DB, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true
+//   })
+//   .then(() => {
+//     console.log('DB connection successful!');
+//     console.log(
+//       `Connected to MongoDB ${mongoose.name} . ${mongoose.collection} at ${mongoose.host}:${mongoose.port}`
+//     );
+//   });

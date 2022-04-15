@@ -13,6 +13,8 @@
   "scripts": {
     "start": "node server/server.js",
     "dev": "nodemon server/server.js",
+    "data:import": "node upload",
+    "data:destroy": "node script-needed",
     "deploy": "git add . && git commit -m Heroku && git push && git push heroku && heroku logs --tail --remote heroku"
   },
   "author": "Joshua Evuetapha",
