@@ -3,6 +3,7 @@ node_modules
 /server/.env
 /server/node_modules
 /.env
+.env
 
 /sampleData/Forex/AUDUSD.json
 /sampleData/Forex/GBPUSD.json

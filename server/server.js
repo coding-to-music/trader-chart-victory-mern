@@ -11,9 +11,9 @@ process.on('uncaughtException', err => {
 
 const app = require('./app');
 
-const DB = process.env.DATABASE;
+const DB = process.env.MONGODB_URI;
 
-const port = process.env.PORT || 8081;
+const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });
@@ -33,7 +33,6 @@ process.on('SIGTERM', () => {
   });
 });
 
-
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
@@ -42,8 +41,3 @@ mongoose
   .then(() => {
     console.log('DB connection successful!');
   });
-  
-
-
-
-
