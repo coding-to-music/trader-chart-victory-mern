@@ -3,9 +3,17 @@
   "version": "1.0.0",
   "description": "An app to visualize stock price",
   "main": "server.js",
+  "engines": {
+    "node": "16.x"
+  },
+  "cacheDirectories": [
+    "node_modules",
+    "front-end/node_modules"
+  ],
   "scripts": {
     "start": "node server/server.js",
-    "dev": "nodemon server/server.js"
+    "dev": "nodemon server/server.js",
+    "deploy": "git add . && git commit -m Heroku && git push && git push heroku && heroku logs --tail --remote heroku"
   },
   "author": "Joshua Evuetapha",
   "license": "ISC",
